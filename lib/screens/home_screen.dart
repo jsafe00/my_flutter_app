@@ -17,11 +17,20 @@ class HomeScreen extends StatelessWidget {
               'https://api.quotable.io/random?tags=technology%2Cfamous-quotes');
           var response = await http.get(url);
           var data = jsonDecode(response.body);
-          print(data["content"]);
-          print(data["author"]);
-          print(data["tags"]);
+
+          String content = data["content"];
+          String author = data["author"];
+          List<dynamic> tags = data["tags"];
+
+          List<String> tagsList = tags.map((tag) => tag.toString()).toList();
+
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => SecondScreen())
+              MaterialPageRoute(builder: (context) => 
+              SecondScreen(
+                contentText: content, 
+                authorName: author,
+                tagsText: tagsList,
+            ))
           );
         }, 
         child: Text("Go to next screen"),
