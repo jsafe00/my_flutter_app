@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:my_flutter_app/screens/second_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,9 +12,17 @@ class HomeScreen extends StatelessWidget {
      child: Scaffold(
       body: Center(
         child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
+          var url = Uri.parse(
+              'https://api.quotable.io/random?tags=technology%2Cfamous-quotes');
+          var response = await http.get(url);
+          var data = jsonDecode(response.body);
+          print(data["content"]);
+          print(data["author"]);
+          print(data["tags"]);
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => SecondScreen()));
+              MaterialPageRoute(builder: (context) => SecondScreen())
+          );
         }, 
         child: Text("Go to next screen"),
           ),
