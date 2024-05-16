@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
             ))
           );
         }, 
-        child: Text("Go to next screen"),
+        child: Text("Get Quote!"),
           ),
         ),
       ),
