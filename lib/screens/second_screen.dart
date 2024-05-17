@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/screens/third_screen.dart';
+import 'app_drawer.dart';
 
  void main(){
   runApp(new SecondScreen());
@@ -33,6 +34,10 @@ class _ApplicationState extends State<SecondScreen>  {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('Drawer'),
+        ),
+        drawer: AppDrawer(),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
