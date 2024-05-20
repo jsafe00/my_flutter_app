@@ -172,4 +172,68 @@
       num++;
   }
 
+//classes
+  Person p1 = Person("Carol", "Female", 40);
+  p1.showData();
+  //print(p1.name);
+  
+  Person p2 = Person("Natasha", "Female", 30);
+  p2.showData();
+  
+}
+
+class Person {
+  String? name, sex;
+  int? age;
+  
+//constructors
+  Person(String name, sex, int age){
+    this.name = name;
+    this.sex = sex;
+    this.age = age;
+  }
+  
+//method
+  void showData(){
+    print('Name = $name');
+    print('Sex = $sex');
+    print('Age = $age');
+    
+    print("$name, $sex, $age");
+  }
+
+ //init obj w/o data
+
+//create class
+  Person p1 = Person();
+  p1.showData();
+  
+   //add data
+  p1.name = "Carol";
+  p1.age = 40;
+  p1.sex = "Female";
+  p1.showData();
+  
+}
+
+class Person{
+  String? name, sex;
+  int? age;
+  
+//constructors
+  void addData(String name, sex, int age){
+    this.name = name;
+    this.sex = sex;
+    this.age = age;
+  }
+  
+//method
+  void showData(){
+    print('Name = $name');
+    print('Sex = $sex');
+    print('Age = $age');
+    
+    print("$name, $sex, $age");
+  } 
+
   
