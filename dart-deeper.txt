@@ -236,4 +236,84 @@ class Person{
     print("$name, $sex, $age");
   } 
 
+//more dart series
+  void main() {
+  int age = 30;
+  String name = "Carol";
+  dynamic name2 = "Monica";
+  bool isNight = false;
+  List<String> names = ["Carol", "Natasha", "Gamora"];
+  names.add("Kate");
+  names.remove("Gamora");
+  //names.add(30);
+
+  name = "Natasha";
+  name2 = 40;
+
+  print(age);
+  print(name);
+  print(isNight);
+  print(name2);
+  print(names);
+
+  print('something');
+  String greet = greeting();
+  int age2 = getAge();
+
+  String greet2 = greeting2();
+  int age22 = getAge2();
+
+  print(age2);
+  print(greet);
+
+  print(greet2);
+  print(age22);
   
+  User userOne = User('Scarlet', 35);
+  print(userOne.username);
+  print(userOne.age);
+  userOne.login();
+  
+  User userTwo = User('Jean', 47);
+  print(userTwo.username);
+  print(userTwo.age);
+  
+  SuperUser userThree = SuperUser("Kate", 19);
+  print(userThree.username);
+  print(userThree.age);
+  userThree.publish();
+  userThree.login();
+}
+
+String greeting() {
+  return 'hello';
+}
+
+int getAge() {
+  return 50;
+}
+
+//arrow function
+String greeting2() => 'hello2';
+int getAge2() => 45;
+
+class User {
+  String username;
+  int age;
+  
+ User(this.username, this.age);
+
+  void login() {
+    print('user logged in');
+  }
+}
+
+class SuperUser extends User {
+  
+  SuperUser(String username, int age): super(username, age);
+  
+  void publish(){
+    print('publish update');
+  }
+}
+ 
