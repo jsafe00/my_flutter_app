@@ -7,20 +7,23 @@ void main() => runApp(MaterialApp(
 ));
 
 class QuoteList extends StatefulWidget {
-  @override
-  _QuoteListState createState() => _QuoteListState();
-}
+   const QuoteList({super.key});
 
+   State<QuoteList> createState() => _QuoteListState();
+ }
 class _QuoteListState extends State<QuoteList> {
   @override
-
   List<Quote> quotes = [
     Quote(book: 'What I Talk About When I Talk About Running',
           text: 'To keep on going, you have to keep up the rhythm.'),
     Quote(book: 'What I Talk About When I Talk About Running',
           text: 'I will be happy if running and I can grow old together.'), 
     Quote(book: 'What I Talk About When I Talk About Running',
-          text: 'You have to wait until tomorrow to find out what tomorrow will bring.'),     
+          text: 'You have to wait until tomorrow to find out what tomorrow will bring.'), 
+    Quote(book: 'After Dark',
+          text: 'It is my motto for life. - Walk slowly; drink lots of water.'),
+    Quote(book: 'What I Talk About When I Talk About Running',
+          text: 'I run, therefore I am.'),    
   ];
 
   @override
@@ -32,7 +35,7 @@ class _QuoteListState extends State<QuoteList> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: Column(
+      body: ListView(
         children: quotes.map((quote) => QuoteCard(
           quote: quote,
           delete: () {
