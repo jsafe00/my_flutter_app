@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'quote.dart';
+import 'main.dart';
 
 class QuoteCard extends StatelessWidget {
 
   final Quote quote;
   final VoidCallback delete;
-  QuoteCard({required this.quote, required this.delete });
+  final Function(Quote) edit;
+
+  QuoteCard({required this.quote, required this.delete, required this.edit});
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +35,34 @@ class QuoteCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.0),
-              TextButton.icon(
-                onPressed: delete,
-                icon: Icon(Icons.delete),
-                label: Text('delete quote'),
-              )
-            ],
-          ),
-        )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton.icon(
+                    onPressed: delete,
+                    icon: Icon(Icons.delete),
+                    label: Text('delete quote'),
+                  ),
+                  TextButton.icon(
+                    onPressed: () async {
+                      final editedQuote = await Navigator.push(
+                      context,
+                        MaterialPageRoute(
+                          builder: (context) => QuoteForm(quote: quote),
+                        ),
+                      );
+                    if (editedQuote != null) {
+                      edit(editedQuote);
+                    }
+                  },
+                  icon: Icon(Icons.edit),
+                  label: Text('edit quote'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
