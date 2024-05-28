@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'quote.dart';
 
 void main() => runApp(MaterialApp(
@@ -14,18 +15,29 @@ class QuoteList extends StatefulWidget {
 }
 
 class _QuoteListState extends State<QuoteList> {
+  List<Quote> quotes = [];
+  bool isLoading = true;
+
   @override
+  void initState() {
+    super.initState();
+    fetchQuotes();
+  }
 
-  List<Quote> quotes = [
-    Quote(book: 'What I Talk About When I Talk About Running',
-          text: 'To keep on going, you have to keep up the rhythm.'),
-    Quote(book: 'What I Talk About When I Talk About Running',
-          text: 'I will be happy if running and I can grow old together.'), 
-    Quote(book: 'What I Talk About When I Talk About Running',
-          text: 'You have to wait until tomorrow to find out what tomorrow will bring.'),     
-  ];
+  Future<void> fetchQuotes() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8081/api/v1/quotes'));
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body)['data'];
+      setState(() {
+        quotes = data.map((json) => Quote.fromJson(json)).toList();
+        isLoading = false;
+      });
+    } else {
+      throw Exception('Failed to load quotes');
+    }
+  }
 
-  Widget quoteTemplate(quote){
+  Widget quoteTemplate(Quote quote) {
     return Card(
       margin: EdgeInsets.fromLTRB(16.0,16.0, 16.0, 0),
       child: Padding(
@@ -62,10 +74,11 @@ class _QuoteListState extends State<QuoteList> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: Column(
-        children: quotes.map((quote) => quoteTemplate(quote)).toList(),
-      )
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+              children: quotes.map((quote) => quoteTemplate(quote)).toList(),
+            ),
     );
   }
 }
-
