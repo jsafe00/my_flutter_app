@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'quote.dart';
-import 'dart:io';
+import 'package:my_flutter_app/quote.dart';
+import 'package:my_flutter_app/platform_utils.dart';
 
 void main() => runApp(MaterialApp(
   home: QuoteList(),
@@ -25,18 +25,9 @@ class _QuoteListState extends State<QuoteList> {
     fetchQuotes();
   }
 
-String get baseUrl {
-  if (Platform.isAndroid) {
-    return 'http://10.0.2.2:8081/api/v1/quotes';
-  } else if (Platform.isIOS) {
-    return 'http://127.0.0.1:8081/api/v1/quotes';
-  } else {
-    throw UnsupportedError('Unsupported platform');
-  }
-}
 
 Future<void> fetchQuotes() async {
-  final response = await http.get(Uri.parse(baseUrl));
+  final response = await http.get(Uri.parse(getBaseUrl())); 
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     List<dynamic> data = jsonData['data']['data'];
