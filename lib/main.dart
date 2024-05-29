@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'quote.dart';
+import 'dart:io';
 
 void main() => runApp(MaterialApp(
   home: QuoteList(),
@@ -24,18 +25,29 @@ class _QuoteListState extends State<QuoteList> {
     fetchQuotes();
   }
 
-  Future<void> fetchQuotes() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8081/api/v1/quotes'));
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body)['data'];
-      setState(() {
-        quotes = data.map((json) => Quote.fromJson(json)).toList();
-        isLoading = false;
-      });
-    } else {
-      throw Exception('Failed to load quotes');
-    }
+String get baseUrl {
+  if (Platform.isAndroid) {
+    return 'http://10.0.2.2:8081/api/v1/quotes';
+  } else if (Platform.isIOS) {
+    return 'http://127.0.0.1:8081/api/v1/quotes';
+  } else {
+    throw UnsupportedError('Unsupported platform');
   }
+}
+
+Future<void> fetchQuotes() async {
+  final response = await http.get(Uri.parse(baseUrl));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> jsonData = jsonDecode(response.body);
+    List<dynamic> data = jsonData['data']['data'];
+    setState(() {
+      quotes = data.map((json) => Quote.fromJson(json)).toList();
+      isLoading = false;
+    });
+  } else {
+    throw Exception('Failed to load quotes');
+  }
+}
 
   Widget quoteTemplate(Quote quote) {
     return Card(
