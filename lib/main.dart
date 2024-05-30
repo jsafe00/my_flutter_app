@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_flutter_app/quote.dart';
-import 'package:my_flutter_app/platform_utils.dart';
+import 'package:my_flutter_app/utils/platform.dart';
 
 void main() => runApp(MaterialApp(
   home: QuoteList(),
@@ -27,7 +27,8 @@ class _QuoteListState extends State<QuoteList> {
 
 
 Future<void> fetchQuotes() async {
-  final response = await http.get(Uri.parse(getBaseUrl())); 
+  final baseUrl = await getBaseUrl();
+    final response = await http.get(Uri.parse(baseUrl));
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     List<dynamic> data = jsonData['data']['data'];
