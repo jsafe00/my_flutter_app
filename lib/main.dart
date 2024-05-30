@@ -28,7 +28,7 @@ class _QuoteListState extends State<QuoteList> {
 
 Future<void> fetchQuotes() async {
   final baseUrl = await getBaseUrl();
-    final response = await http.get(Uri.parse(baseUrl));
+  final response = await http.get(Uri.parse(baseUrl));
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     List<dynamic> data = jsonData['data']['data'];
@@ -38,6 +38,16 @@ Future<void> fetchQuotes() async {
     });
   } else {
     throw Exception('Failed to load quotes');
+  }
+}
+
+Future<void> deleteQuote(int id) async {
+  final baseUrl = await getBaseUrl();
+  final response = await http.delete(Uri.parse('$baseUrl/$id'));
+  if (response.statusCode == 200) {
+    fetchQuotes(); 
+  } else {
+    throw Exception('Failed to delete quotes');
   }
 }
 
@@ -63,6 +73,24 @@ Future<void> fetchQuotes() async {
                 fontSize: 14.0,
                 color: Colors.grey[800]
               ),
+            ),
+            SizedBox(height: 6.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: (){
+                  print('Update');
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  deleteQuote(quote.id);
+                  },
+                ),
+              ]
             ),
           ],
         ),
