@@ -1,18 +1,21 @@
 class Quote {
-  int id;
-  String text;
+  int quoteId;
+  String quote;
+  int bookId;
   String book;
 
   Quote({
-    required this.id,
-    required this.text, 
+    required this.quoteId,
+    required this.quote, 
+    required this.bookId,
     required this.book
   });
 
   factory Quote.fromJson(Map<String, dynamic> json) {
     return Quote(
-      id: json['id'],
-      text: json['attributes']['text'],
+      quoteId: json['id'],
+      quote: json['attributes']['text'],
+      bookId: json['relationships']['book']['data']['id'],
       book: json['relationships']['book']['data']['title'],
     );
   }

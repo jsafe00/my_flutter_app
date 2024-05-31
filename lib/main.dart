@@ -25,6 +25,77 @@ class _QuoteListState extends State<QuoteList> {
     fetchQuotes();
   }
 
+Future<void> createQuote(String text, int bookId) async {
+  final baseUrl = await getBaseUrl();
+  final response = await http.post(
+  Uri.parse('$baseUrl/quotes'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({
+      'quote': text, 
+      'book_id': bookId
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    fetchQuotes(); 
+  } else {
+    print('Failed to create quote: ${response.statusCode} ${response.body}');
+    throw Exception('Failed to create quote');
+  }
+}
+
+Future<void> showAddQuoteDialog() async {
+  String text = '';
+  int? bookId;
+
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Add Quote'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  onChanged: (value) {
+                    text = value;
+                  },
+                  decoration: InputDecoration(labelText: 'Quote Text'),
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  onChanged: (value) {
+                    bookId = int.tryParse(value);
+                  },
+                  decoration: InputDecoration(labelText: 'Book ID<for now>'),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (bookId != null) {
+                    createQuote(text, bookId!);
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Text('Add'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
 
 Future<void> fetchQuotes() async {
   final baseUrl = await getBaseUrl();
@@ -60,7 +131,7 @@ Future<void> deleteQuote(int id) async {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              quote.text,
+              quote.quote,
               style: TextStyle(
                 fontSize: 18.0,
                 color: Colors.grey[600],
@@ -87,7 +158,7 @@ Future<void> deleteQuote(int id) async {
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  deleteQuote(quote.id);
+                  deleteQuote(quote.quoteId);
                   },
                 ),
               ]
@@ -117,7 +188,7 @@ Future<void> deleteQuote(int id) async {
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
               onPressed: () {
-                print('add');
+               showAddQuoteDialog();
               },
               child: Icon(Icons.add),
               backgroundColor: Colors.redAccent,
