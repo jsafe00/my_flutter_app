@@ -111,13 +111,21 @@ Future<void> deleteQuote(int id) async {
           : ListView(
               children: quotes.map((quote) => quoteTemplate(quote)).toList(),
           ),
-        floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('add');
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.redAccent,
+      floatingActionButton: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(
+              onPressed: () {
+                print('add');
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.redAccent,
+            ),
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
