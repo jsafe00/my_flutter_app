@@ -28,7 +28,7 @@ class _QuoteListState extends State<QuoteList> {
 
 Future<void> fetchQuotes() async {
   final baseUrl = await getBaseUrl();
-  final response = await http.get(Uri.parse(baseUrl));
+  final response = await http.get(Uri.parse('$baseUrl/quotes'));
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     List<dynamic> data = jsonData['data']['data'];
@@ -43,7 +43,7 @@ Future<void> fetchQuotes() async {
 
 Future<void> deleteQuote(int id) async {
   final baseUrl = await getBaseUrl();
-  final response = await http.delete(Uri.parse('$baseUrl/$id'));
+  final response = await http.delete(Uri.parse('$baseUrl/quotes/$id'));
   if (response.statusCode == 200) {
     fetchQuotes(); 
   } else {
