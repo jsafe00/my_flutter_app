@@ -110,7 +110,14 @@ Future<void> deleteQuote(int id) async {
           ? Center(child: CircularProgressIndicator())
           : ListView(
               children: quotes.map((quote) => quoteTemplate(quote)).toList(),
-            ),
+          ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('add');
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.redAccent,
+      ),
     );
   }
 }
