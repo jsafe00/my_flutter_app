@@ -17,6 +17,7 @@ class QuoteList extends StatefulWidget {
 
 class _QuoteListState extends State<QuoteList> {
   List<Quote> quotes = [];
+  Map<int, String> books = {};
   bool isLoading = true;
 
   @override
@@ -46,7 +47,7 @@ Future<void> createQuote(String text, int bookId) async {
 
 Future<void> showAddQuoteDialog() async {
   String text = '';
-  int? bookId;
+  int? selectedBookId;
 
   await showDialog(
     context: context,
@@ -65,11 +66,21 @@ Future<void> showAddQuoteDialog() async {
                   decoration: InputDecoration(labelText: 'Quote Text'),
                 ),
                 SizedBox(height: 16.0),
-                TextField(
-                  onChanged: (value) {
-                    bookId = int.tryParse(value);
+                DropdownButton<int>(
+                  isExpanded: true,
+                  value: selectedBookId,
+                  hint: Text('Select Book'),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      selectedBookId = newValue;
+                    });
                   },
-                  decoration: InputDecoration(labelText: 'Book ID<for now>'),
+                  items: books.entries.map<DropdownMenuItem<int>>((entry) {
+                    return DropdownMenuItem<int>(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -82,8 +93,8 @@ Future<void> showAddQuoteDialog() async {
               ),
               TextButton(
                 onPressed: () {
-                  if (bookId != null) {
-                    createQuote(text, bookId!);
+                  if (selectedBookId != null) {
+                    createQuote(text, selectedBookId!);
                     Navigator.of(context).pop();
                   }
                 },
@@ -105,6 +116,7 @@ Future<void> fetchQuotes() async {
     List<dynamic> data = jsonData['data']['data'];
     setState(() {
       quotes = data.map((json) => Quote.fromJson(json)).toList();
+      books = {for (var q in quotes) q.bookId: q.book};
       isLoading = false;
     });
   } else {
